@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>For My Favorite Person In The Universe ✨</title>
+
+  <!-- Open Graph / Meta -->
+  <meta name="description" content="A special romantic bouquet and memory journey made just for you.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💐</text></svg>">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Three.js (r128) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <!-- Ambient Romantic Glow, Floating Hearts Canvas & Film Texture -->
+  <div class="ambient-glow"></div>
+  <canvas id="ambient-hearts" class="ambient-hearts-canvas"></canvas>
+  <div class="noise-overlay"></div>
+
+  <!-- Audio Controller Floating Toggle -->
+  <div id="audio-controller" class="audio-controller" title="Toggle Romantic Music">
+    <div class="music-waves">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <span class="audio-label">Music</span>
+  </div>
+
+  <main id="app">
+    <!-- =========================================================================
+         1. HERO INTRO VIEW
+         ========================================================================= -->
+    <section id="intro-view" class="view-section active">
+      <div class="intro-card">
+        <div class="intro-badge">
+          <span>💖</span>
+          <span id="intro-badge-text">to my beautiful lil baby maramero</span>
+        </div>
+        <h1 class="intro-title" id="intro-title">For My Favorite Person In The Universe</h1>
+        <p class="intro-desc" id="intro-desc">
+          To unlock your Prizes you need to answer a series of questions to test your knowledge of us. And you better get them all right 🙄. THIS IS A POPQUIZ!!!!
+        </p>
+        <button id="btn-start-quiz" class="btn-primary">
+          <span id="btn-start-text">Start</span>
+          <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         2. QUIZ QUESTIONS VIEW ("Who Wants to Be a Millionaire" Elimination)
+         ========================================================================= -->
+    <section id="quiz-view" class="view-section">
+      <div class="quiz-wrapper">
+        <div class="quiz-header">
+          <div class="quiz-progress-bar-bg">
+            <div id="quiz-progress-bar" class="quiz-progress-bar-fill"></div>
+          </div>
+          <div class="quiz-meta-row">
+            <span id="quiz-step-tag" class="quiz-step-tag">Question 1 of 7</span>
+            <span>Made with love by your favorite person</span>
+          </div>
+        </div>
+
+        <div class="question-card">
+          <h2 id="question-prompt" class="question-prompt">Loading question...</h2>
+          <p id="question-hint" class="question-hint">Hint...</p>
+          
+          <div id="options-container" class="options-grid">
+            <!-- Dynamic Option Buttons -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         3. 3D BOUQUET VIEW (Three.js Bloom & Interaction)
+         ========================================================================= -->
+    <section id="flower-view" class="view-section">
+      <div id="flower-canvas-container" class="flower-canvas-container">
+        <!-- Three.js Canvas Injected Here -->
+      </div>
+
+      <div class="flower-overlay-ui">
+        <div class="flower-top-header">
+          <h1 class="flower-headline">A Bouquet That Will Never Fade</h1>
+          <p class="flower-subtext">Real flowers wilt in a week, but this bouquet was coded to bloom for you forever.</p>
+          <div class="flower-interaction-hint">
+            <span>✨</span>
+            <span>Drag to rotate bouquet 360° • Click dewdrops for secret notes</span>
+          </div>
+        </div>
+
+        <div class="flower-bottom-dock">
+          <!-- Bouquet Style Selector -->
+          <div id="flower-style-picker" class="flower-style-picker">
+            <!-- Dynamic style buttons: Classic Velvet Red Roses, Blush Pink Romance, Sunset Peach & Coral, Crystal & Moonlight -->
+          </div>
+
+          <button id="btn-open-letter-modal" class="btn-open-letter">
+            <span>Read My Love Letter</span>
+            <span>💌</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       4. WRONG ANSWER MODAL (Shuffled Quotes & Reaction GIF)
+       ========================================================================= -->
+  <div id="wrong-modal" class="modal-backdrop">
+    <div class="wrong-modal-card">
+      <div class="wrong-gif-wrapper">
+        <img id="wrong-modal-gif" src="" alt="Teasing reaction gif">
+      </div>
+      <h3 id="wrong-modal-message" class="wrong-message-large">Ana F7mt Kol haga 🙄</h3>
+      <button id="btn-try-again" class="btn-try-again">
+        <span>Try Again 🥺</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       5. CORRECT ANSWER CELEBRATION MODAL ("Bravo 3leky Ya maramero 😘❤️")
+       ========================================================================= -->
+  <div id="correct-modal" class="modal-backdrop">
+    <div class="correct-modal-card">
+      <div class="correct-gif-wrapper">
+        <img id="correct-modal-gif" src="" alt="Celebration reaction gif">
+      </div>
+      <h3 id="correct-modal-message" class="correct-message-large">Bravo 3leky Ya maramero 😘❤️</h3>
+      <button id="btn-continue-quiz" class="btn-continue-quiz">
+        <span>Next Question</span>
+        <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       6. WAX-SEALED LOVE LETTER MODAL (With Direct Close Button)
+       ========================================================================= -->
+  <div id="letter-modal" class="letter-envelope-modal">
+    <div class="envelope-stage">
+      <!-- Envelope View -->
+      <div id="wax-envelope" class="wax-envelope">
+        <div class="wax-seal-badge">
+          <span>LOVE</span>
+        </div>
+        <h3 class="envelope-hint-text">A Letter For You</h3>
+        <p class="envelope-sub-hint">Tap the wax seal to open...</p>
+      </div>
+
+      <!-- Unfolded Letter Parchment with Clear Close Button -->
+      <div id="letter-sheet" class="letter-sheet">
+        <button id="btn-close-letter" class="btn-close-letter" title="Close Letter & Back to Bouquet">✕</button>
+        <div class="letter-top-seal">♥</div>
+        <h2 id="letter-title" class="letter-title">To My Dearest Person,</h2>
+        <div id="letter-body" class="letter-body">
+          <!-- Populated from story.js -->
+        </div>
+        <div class="letter-signoff">
+          <div class="letter-signature-intro">Forever & Always Yours,</div>
+          <div id="letter-signature" class="letter-handwriting">With All My Love ❤️</div>
+        </div>
+
+        <!-- Secondary clear return button at the bottom -->
+        <button id="btn-return-to-bouquet" class="btn-return-to-bouquet">
+          <span>← Back to Bouquet</span>
+          <span>💐</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Romantic Floating Hearts Canvas Script (Multiple Shades of Red) -->
+  <script>
+    (function() {
+      const canvas = document.getElementById('ambient-hearts');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, hearts = [];
+
+      const redShades = [
+        '#e11d48', // Crimson Red
+        '#be123c', // Deep Ruby
+        '#9f1239', // Dark Burgundy
+        '#881337', // Wine
+        '#dc2626', // Scarlet
+        '#fb7185', // Soft Rose
+        '#fda4af'  // Warm Blush
+      ];
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        initHearts();
+      }
+
+      function initHearts() {
+        hearts = [];
+        const count = Math.min(65, Math.floor((width * height) / 18000));
+        for (let i = 0; i < count; i++) {
+          hearts.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            size: Math.random() * 0.75 + 0.35,
+            color: redShades[Math.floor(Math.random() * redShades.length)],
+            speedY: Math.random() * 0.65 + 0.35,
+            swaySpeed: Math.random() * 0.02 + 0.01,
+            swayOffset: Math.random() * Math.PI * 2,
+            swayRadius: Math.random() * 35 + 15,
+            rotation: (Math.random() - 0.5) * 0.35,
+            alpha: Math.random() * 0.5 + 0.35
+          });
+        }
+      }
+
+      function drawHeartShape(x, y, scale, color, alpha, rot) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rot);
+        ctx.scale(scale, scale);
+        ctx.beginPath();
+        
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-12, -12, -22, 5, 0, 22);
+        ctx.bezierCurveTo(22, 5, 12, -12, 0, 0);
+        
+        ctx.fillStyle = color;
+        ctx.globalAlpha = alpha;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        hearts.forEach(h => {
+          h.y -= h.speedY;
+          h.swayOffset += h.swaySpeed;
+          const currentX = h.x + Math.sin(h.swayOffset) * h.swayRadius;
+          const currentAlpha = Math.max(0.15, h.alpha + Math.sin(h.swayOffset * 1.5) * 0.15);
+
+          drawHeartShape(currentX, h.y, h.size, h.color, currentAlpha, h.rotation);
+
+          if (h.y < -40) {
+            h.y = height + 40;
+            h.x = Math.random() * width;
+          }
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      animate();
+    })();
+
+    // Audio Controller Toggle Listener
+    document.getElementById('audio-controller')?.addEventListener('click', function() {
+      if (window.romanticAudio) {
+        const isPlaying = window.romanticAudio.toggle();
+        if (isPlaying) {
+          this.classList.add('audio-playing');
+        } else {
+          this.classList.remove('audio-playing');
+        }
+      }
+    });
+  </script>
+
+  <!-- Application Modules -->
+  <script src="js/story.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/flowers3d.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/letter.js"></script>
+</body>
+</html>
